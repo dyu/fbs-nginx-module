@@ -1,0 +1,20 @@
+include_rules
+# =====================================
+
+NAME = ngx_http_fbs_module
+SO_NAME = ngx_http_fbs_module
+
+CFLAGS += -I$(ROOT_DIR)/include
+CFLAGS += -I$(ROOT_DIR)/flatbuffers/include
+CFLAGS += -I/opt/tengine/include
+
+: $(ROOT_DIR)/flatbuffers/src/idl_parser.cpp |> !cc |>
+
+: foreach *.cpp |> !cc |>
+
+: foreach *.c |> !cc |>
+
+# ===================================== shared lib containing all the deps
+
+: *.o |> !dynshared |>
+

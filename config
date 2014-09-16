@@ -1,0 +1,7 @@
+ngx_addon_name=ngx_http_fbs_module
+HTTP_AUX_FILTER_MODULES="$HTTP_AUX_FILTER_MODULES ngx_http_fbs_module"
+NGX_ADDON_SRCS="$NGX_ADDON_SRCS $ngx_addon_dir/src/ngx_http_fbs_module.cpp $ngx_addon_dir/src/fbs_json.cpp $ngx_addon_dir/src/ndk_set_var.c $ngx_addon_dir/src/ndk_rewrite.c $ngx_addon_dir/flatbuffers/src/idl_parser.cpp"
+NGX_ADDON_DEPS="$NGX_ADDON_DEPS $ngx_addon_dir/src/ddebug.h $ngx_addon_dir/src/fbs_json.h $ngx_addon_dir/src/ndk_set_var.h $ngx_addon_dir/src/ndk_rewrite.h $ngx_addon_dir/flatbuffers/include/flatbuffers/flatbuffers.h $ngx_addon_dir/flatbuffers/include/flatbuffers/util.h $ngx_addon_dir/flatbuffers/include/flatbuffers/idl.h"
+
+CC=g++
+CFLAGS="-std=c++11 $CFLAGS -DNDK_SET_VAR"

@@ -1,0 +1,11 @@
+/flatbuffers
+objs/
+target/
+autotest
+autoconf.err
+local/
+.local/
+.tup/
+*.o
+*.a
+*.so

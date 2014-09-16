@@ -1,0 +1,38 @@
+CFLAGS += -std=c++11
+CFLAGS += -pipe
+CFLAGS += -O2
+CFLAGS += -W
+CFLAGS += -Wall
+CFLAGS += -Wpointer-arith
+CFLAGS += -Wno-unused-parameter
+CFLAGS += -Werror
+CFLAGS += -g
+CFLAGS += -fPIC
+
+# defaults to gcc (if cpp, define CC = g++ on your project's Tuprules.tup)
+CC = g++
+
+ROOT_DIR = $(TUP_CWD)
+
+NAME = %d
+
+SO_NAME = lib$(NAME)
+
+# =====================================
+
+!cc = |> $(CC) -c $(CFLAGS) %f -o %o |> %B.o
+
+!ccexe = |> $(CC) $(CFLAGS) %f -o %o |> %B
+
+#!ccexe_to_bin = |> $(CC) $(CFLAGS) %f -o %o |> $(WDIR)/target/%B
+
+!ar = |> ar crs %o %f |> lib$(NAME).a
+
+!exe = |> $(CC) %f -o %o |> $(NAME)
+
+!shared = |> $(CC) -shared -fPIC -o %o %f |> $(SO_NAME).so
+
+!dynshared = |> $(CC) -rdynamic -shared -fPIC -o %o %f |> $(SO_NAME).so
+
+!link_deps = |> ln -sf %f %o |> symlink-%b
+
