@@ -8,18 +8,12 @@
 
 # Usecase
 
-Use this if you want your cpp/go/java upstream to receive a flatbuffer message, instead of parsing json directly.
+Suppose your upstream/backend is a json rpc/rest api server and you're load-balancing your requests
+via nginx (or simply using it as [ssl termination](http://nginx.com/resources/admin-guide/nginx-ssl-termination/)).  
 
-One advantage is that the json structure is pre-validated before sending to upstream.  
-
-You can also limit the size of the json payload:
-```
-    # ensure client_max_body_size == client_body_buffer_size
-    client_max_body_size 16k;
-    client_body_buffer_size 16k;
-    
-    # anything beyond this, the json payload will not be parsed (see the example below)
-```
+This module allows you to:
+- pre-validate the structure and size of the json request/payload before sending it upstream
+- send a binary flatbuffer to upstream instead (json payload is converted to a flatbuffer binary)
 
 In the future, more validation will be added (fields with validation attributes in the fbs_schema).
 
@@ -67,6 +61,7 @@ http {
         }
 
         location = /bar {
+            # limit the json payload
             client_max_body_size 16k;
             client_body_buffer_size 16k;
         
@@ -78,10 +73,12 @@ http {
             
             # sucessful ... proceed to upstream (for example: uwsgi)
             
-            # include the flatbuffer binary $hello as an upstream param
-            uwsgi_param fbs $hello;
+            # send the binary flatbuffer as a param
+            uwsgi_param message $hello;
             
+            # we've already processed the request body (converted json to a flatbuffer binary)
             uwsgi_pass_request_body off;
+            
             uwsgi_pass unix:/tmp/uwsgi.socket;
         }
     }
